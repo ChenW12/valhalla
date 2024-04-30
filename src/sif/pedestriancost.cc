@@ -818,6 +818,9 @@ void ParsePedestrianCostOptions(const rapidjson::Document& doc,
   ParseBaseCostOptions(json, c, kBaseCostOptsConfig);
   JSON_PBF_DEFAULT(co, kDefaultPedestrianType, json, "/type", transport_type);
 
+  // BWRP night walking flag
+  JSON_PBF_DEFAULT(co, false, json, "/bwrp_safer_night_walk", bwrp_safer_night_walk);
+
   // Set type specific defaults, override with json
   if (co->transport_type() == "wheelchair") {
     JSON_PBF_RANGED_DEFAULT(co, kMaxDistanceWheelchairRange, json, "/max_distance", max_distance);
