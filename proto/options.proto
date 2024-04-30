@@ -316,8 +316,8 @@ message Costing {
     oneof has_hgv_no_access_penalty {
       float hgv_no_access_penalty = 85;
     }
+    // The engine will try to avoid areas that don't have sufficient light, like parks
     oneof has_bwrp_safer_night_walk {
-      // The engine will try to avoid areas that don't have sufficient light, like parks
       bool bwrp_safer_night_walk = 86;
     }
   }
