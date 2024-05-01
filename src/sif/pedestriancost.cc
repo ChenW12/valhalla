@@ -642,6 +642,11 @@ bool PedestrianCost::Allowed(const baldr::DirectedEdge* edge,
                              const uint64_t current_time,
                              const uint32_t tz_index,
                              uint8_t& restriction_idx) const {
+//  // Does not allow edges with not light
+//  if (!edge->lit()) {
+//    return false;
+//  }
+
   if (!IsAccessible(edge) || (edge->surface() > minimal_allowed_surface_) || edge->is_shortcut() ||
       IsUserAvoidEdge(edgeid) || edge->sac_scale() > max_hiking_difficulty_ ||
       (!pred.deadend() && pred.opp_local_idx() == edge->localedgeidx() &&
