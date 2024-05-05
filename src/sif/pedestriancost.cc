@@ -724,6 +724,8 @@ Cost PedestrianCost::EdgeCost(const baldr::DirectedEdge* edge,
     return Cost(edge->length(), sec);
   }
 
+  // If the query requires less crime rate routes, we will penalise the segment according to
+  // the number of crime incident
   if (less_crime_rate_) {
     if (edge->crime() > 0) {
       return {sec * 99, sec};
