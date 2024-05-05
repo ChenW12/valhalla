@@ -177,11 +177,6 @@ DynamicCost::DynamicCost(const Costing& costing,
     user_exclude_edges_.insert({GraphId(edge.id()), edge.percent_along()});
   }
 
-  if (costing.options().bwrp_safer_night_walk()) {
-    LOG_INFO("BWRP safer night walk is ON");
-  } else {
-    LOG_INFO("BWRP safer night walk is OFF");
-  }
 }
 
 DynamicCost::~DynamicCost() {

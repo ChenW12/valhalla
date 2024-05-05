@@ -514,6 +514,10 @@ public:
   // a bike share station connection
   bool project_on_bss_connection = 0;
 
+  // (BWRP) Used in EdgeCost, when it is true, the routing will take account of the tag 'crime=<x>'
+  // from OSM data
+  bool less_crime_rate_;
+
   /**
    * Override the base transition cost to not add maneuver penalties onto transit edges.
    * Base transition cost that all costing methods use. Includes costs for
@@ -627,6 +631,8 @@ PedestrianCost::PedestrianCost(const Costing& costing)
   for (uint32_t i = 0; i <= kMaxGradeFactor; i++) {
     grade_penalty[i] = avoid_hills * kAvoidHillsStrength[i];
   }
+
+  less_crime_rate_ = costing_options.less_crime_rate();
 }
 
 // Check if access is allowed on the specified edge. Disallow if no
@@ -716,6 +722,12 @@ Cost PedestrianCost::EdgeCost(const baldr::DirectedEdge* edge,
 
   if (shortest_) {
     return Cost(edge->length(), sec);
+  }
+
+  if (less_crime_rate_) {
+    if (edge->crime() > 0) {
+      return {sec * 99, sec};
+    }
   }
 
 //  LOG_INFO("The crime is:" + std::to_string(edge->crime()) + " and the id is " + std::to_string(edge->lineid()));
@@ -826,7 +838,7 @@ void ParsePedestrianCostOptions(const rapidjson::Document& doc,
   JSON_PBF_DEFAULT(co, kDefaultPedestrianType, json, "/type", transport_type);
 
   // BWRP night walking flag
-  JSON_PBF_DEFAULT(co, false, json, "/bwrp_safer_night_walk", bwrp_safer_night_walk);
+  JSON_PBF_DEFAULT(co, false, json, "/less_crime_rate", less_crime_rate);
 
   // Set type specific defaults, override with json
   if (co->transport_type() == "wheelchair") {
