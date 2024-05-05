@@ -574,6 +574,12 @@ public:
    */
   void set_restrictions(const uint32_t mask);
 
+  uint32_t crime() const {
+    return crime_;
+  }
+
+  void set_crime(const uint32_t crime);
+
   /**
    * Get the specialized use of this edge.
    * @return  Returns the use type of this edge.
@@ -1297,6 +1303,9 @@ protected:
   uint32_t speed_type_ : 1;    // Speed type (used in setting default speeds)
   uint32_t named_ : 1;         // 1 if this edge has names, 0 if unnamed
   uint32_t link_ : 1;          // *link tag - Ramp or turn channel. Used in costing.
+
+  // BWRP
+  uint32_t crime_;
 };
 
 /**

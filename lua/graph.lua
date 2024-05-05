@@ -1685,6 +1685,10 @@ function filter_tags_generic(kv)
   kv["surface"] = kv["surface"]
   kv["wheelchair"] = wheelchair[kv["wheelchair"]]
 
+  -- BWRP
+--  kv["crime"] = kv["crime"]
+
+
   --lower the default speed for tracks
   if kv["highway"] == "track" then
      kv["default_speed"] = 5

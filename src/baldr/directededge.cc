@@ -588,6 +588,10 @@ void DirectedEdge::set_lit(const bool lit) {
   lit_ = lit;
 }
 
+void DirectedEdge::set_crime(const uint32_t crime) {
+  crime_ = crime;
+}
+
 // Json representation
 json::MapPtr DirectedEdge::json() const {
   json::MapPtr map = json::map({

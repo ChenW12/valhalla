@@ -89,6 +89,9 @@ DirectedEdgeBuilder::DirectedEdgeBuilder(const OSMWay& way,
 
   set_lit(way.lit());
 
+  // BWRP
+  set_crime(way.crime());
+
   // Set forward flag and access modes (based on direction)
   set_forward(forward);
   uint32_t forward_access = 0;

@@ -2486,6 +2486,19 @@ struct OSMWay {
     return lit_;
   }
 
+  /**
+   * Sets the effect state (BWRP)
+   *
+   * @param effect the effect of the way
+   */
+  void set_crime(const uint32_t crime) {
+    crime_ = crime;
+  }
+
+  uint32_t crime() const {
+    return crime_;
+  }
+
   static void
   ProcessNamesPronunciations(const UniqueNames& name_offset_map,
                              const std::vector<std::pair<std::string, bool>>& default_languages,
@@ -2733,6 +2746,8 @@ struct OSMWay {
 
   // layer index(Z-level) of the way relatively to other levels
   int8_t layer_;
+
+  uint32_t crime_;
 };
 
 } // namespace mjolnir

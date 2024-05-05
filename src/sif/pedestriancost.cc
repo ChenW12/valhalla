@@ -718,6 +718,8 @@ Cost PedestrianCost::EdgeCost(const baldr::DirectedEdge* edge,
     return Cost(edge->length(), sec);
   }
 
+//  LOG_INFO("The crime is:" + std::to_string(edge->crime()) + " and the id is " + std::to_string(edge->lineid()));
+
   // TODO - consider using an array of "use factors" to avoid this conditional
   float factor = 1.0f + kSacScaleCostFactor[static_cast<uint8_t>(edge->sac_scale())] +
                  grade_penalty[edge->weighted_grade()];
