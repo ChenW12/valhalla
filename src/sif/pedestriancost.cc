@@ -724,8 +724,11 @@ Cost PedestrianCost::EdgeCost(const baldr::DirectedEdge* edge,
     return Cost(edge->length(), sec);
   }
 
+  LOG_INFO("The time is: "+ std::to_string(time_info.second_of_week));
+
   // If the query requires less crime rate routes, we will penalise the segment according to
   // the number of crime incident
+  // TODO it need to be a better factor calculation
   if (less_crime_rate_) {
     if (edge->crime() > 0) {
       return {sec * 99, sec};
