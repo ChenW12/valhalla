@@ -1,0 +1,3 @@
+./../build/valhalla_service ../valhalla.json route '{"locations":[{"lat":51.50166540878063,"lon":-0.18284365986569398},{"lat":51.509793223963996,"lon":-0.18769830681451777}],"costing":"pedestrian","costing_options":{"pedestrian":{"use_lit":0,"less_crime_rate":false}},"directions_options":{"units":"kilometers"},"date_time":{"type":1,"value":"2024-05-06T10:04"}}' | jq '.'
+
+./../build/valhalla_service ../valhalla.json route '{"locations":[{"lat":51.50166540878063,"lon":-0.18284365986569398},{"lat":51.509793223963996,"lon":-0.18769830681451777}],"costing":"pedestrian","costing_options":{"pedestrian":{"use_lit":0,"less_crime_rate":false}},"directions_options":{"units":"kilometers"}}' | jq '.'

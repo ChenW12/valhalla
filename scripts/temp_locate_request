@@ -1,0 +1,13 @@
+{
+  "locations": [
+    {
+      "lat": 51.50509635629854,
+      "lon": -0.18553439173907288,
+      "minimum_reachability": 0,
+      "radius": 0,
+      "node_snap_tolerance": 5,
+      "preferred_side": "either"
+    }
+  ],
+  "verbose": true
+}

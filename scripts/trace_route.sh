@@ -1,0 +1,5 @@
+./../build/valhalla_service ../valhalla.json trace_route '{"costing":"pedestrian","costing_options":{"pedestrian":{"use_lit":0,"bwrp_safer_night_walk":false}},"directions_options":{"units":"kilometers"},"encoded_polyline": "wzlfaBtffJaA`Jj@fGoL`G{r@~R}|Afj@sFdBaQtF{HvCmC|@{CdAyGzBmHdCmDjAiLzDmHdCeGrB_`@pMcPbFyCpA{~@d[uFlB{[vKcVdI{KnD"}' | jq '.' | grep cost
+
+./../build/valhalla_service ../valhalla.json trace_route '{"costing":"pedestrian","costing_options":{"pedestrian":{"use_lit":0.8,"bwrp_safer_night_walk":false}},"directions_options":{"units":"kilometers"},"encoded_polyline": "u}kfaBvedJkHzy@M|Aa@jDa@vDo@`E[dCUlBQvA}@fGWdBIl@kEr]MdAaGdl@MdAsBhDQtBOhBObBdApEQxBoB~VgApN_@zEKbBeBtCUlDQ|BOzBAf@^jEWrDElAKbC}@dUMlCa@~U@vJ?p@DbFhAfNpAjKjE~[jCt\\fChXj@|D^`D~@b@T`AK~BG`Au@jCiCl@oBj@qFnCwT`MmJlFqMvHiHdEkGrDm@\\iAl@qAn@c@RgAl@qEdCwNfIyLrHq\\~OyBfAeAh@{b@hTy@wFmIgl@_AmGmwB`jAkb@tSgOtGmZxMgR|FeHnB}Bp@gIbBqANeD\\eB^ZwESuAMy@S_B_ByLoAeJ{AiBq@eHuAkM}C_X{@eHmCaVs@oHQoBSaCIwAo@kMYgGo@sQ_Bed@s@oSu@uSIyD_@qNq@k\\{A}p@q@qVKqCEyCcAo\\AWR[DODOJc@DO@SYsKhBS[{K"}' | jq '.' | grep cost
+#51.49902310291276, -0.17897706683762685
+#51.511710828451896, -0.17521416648448557
