@@ -316,9 +316,12 @@ message Costing {
     oneof has_hgv_no_access_penalty {
       float hgv_no_access_penalty = 85;
     }
-    // The engine will try to avoid areas that don't have sufficient light, like parks
+
     oneof has_less_crime_rate{
       bool less_crime_rate = 86;
+    }
+    oneof has_low_traffic_rate{
+      bool low_traffic_rate = 87;
     }
   }
 

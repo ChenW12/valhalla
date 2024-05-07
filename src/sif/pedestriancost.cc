@@ -6,6 +6,7 @@
 #include "proto/options.pb.h"
 #include "proto_conversions.h"
 #include "sif/costconstants.h"
+#include "sif/dynamiccost.h"
 #include <string>
 
 #ifdef INLINE_TEST
@@ -519,6 +520,10 @@ public:
   // from OSM data
   bool less_crime_rate_;
 
+  // (BWRP) Used in EdgeCost, when it is true, the routing will take account of the traffic rate
+  // which is inferred from the flow speed of edges.
+  bool low_traffic_rate_;
+
   /**
    * Override the base transition cost to not add maneuver penalties onto transit edges.
    * Base transition cost that all costing methods use. Includes costs for
@@ -634,6 +639,7 @@ PedestrianCost::PedestrianCost(const Costing& costing)
   }
 
   less_crime_rate_ = costing_options.less_crime_rate();
+  low_traffic_rate_ = costing_options.low_traffic_rate();
 }
 
 // Check if access is allowed on the specified edge. Disallow if no
@@ -738,7 +744,9 @@ Cost PedestrianCost::EdgeCost(const baldr::DirectedEdge* edge,
   // BWRP START
 
   // Penalise high traffic rate edges
-  return {sec * edge->free_flow_speed(), sec};
+  if (low_traffic_rate_) {
+    return {sec * edge->free_flow_speed(), sec};
+  }
 
   // If the query requires less crime rate routes, we will penalise the segment according to
   // the number of crime incident
@@ -860,6 +868,8 @@ void ParsePedestrianCostOptions(const rapidjson::Document& doc,
 
   // BWRP night walking flag
   JSON_PBF_DEFAULT(co, false, json, "/less_crime_rate", less_crime_rate);
+
+  JSON_PBF_DEFAULT(co, false, json, "/low_traffic_rate", low_traffic_rate);
 
   // Set type specific defaults, override with json
   if (co->transport_type() == "wheelchair") {
