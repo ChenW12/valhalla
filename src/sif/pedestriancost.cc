@@ -743,7 +743,7 @@ Cost PedestrianCost::EdgeCost(const baldr::DirectedEdge* edge,
 
   // BWRP START
 
-  // Penalise high traffic rate edges
+  // Penalise high flow speed edges
   if (low_traffic_rate_) {
     return {sec * edge->free_flow_speed(), sec};
   }
