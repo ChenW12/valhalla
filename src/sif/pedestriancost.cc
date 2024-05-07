@@ -869,7 +869,19 @@ void ParsePedestrianCostOptions(const rapidjson::Document& doc,
   // BWRP night walking flag
   JSON_PBF_DEFAULT(co, false, json, "/less_crime_rate", less_crime_rate);
 
+  if (co->less_crime_rate()) {
+    LOG_INFO("Option less_crime_rate is ON");
+  } else {
+    LOG_INFO("Option less_crime_rate is OFF");
+  }
+
   JSON_PBF_DEFAULT(co, false, json, "/low_traffic_rate", low_traffic_rate);
+
+  if (co->low_traffic_rate()) {
+    LOG_INFO("Option low_traffic_rate is ON");
+  } else {
+    LOG_INFO("Option low_traffic_rate is OFF");
+  }
 
   // Set type specific defaults, override with json
   if (co->transport_type() == "wheelchair") {
