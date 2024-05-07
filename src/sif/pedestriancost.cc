@@ -6,6 +6,7 @@
 #include "proto/options.pb.h"
 #include "proto_conversions.h"
 #include "sif/costconstants.h"
+#include <string>
 
 #ifdef INLINE_TEST
 #include "test.h"
@@ -670,6 +671,16 @@ bool PedestrianCost::Allowed(const baldr::DirectedEdge* edge,
     return false;
   }
 
+//  if (edge->has_flow_speed()) {
+//    std::string s = GraphTile::FileSuffix(edge->endnode());
+//    LOG_INFO(s);
+//    auto w = std::to_string(tile->edgeinfo(edge).wayid());
+//    LOG_INFO("The edge id is: " + std::to_string(edgeid));
+//    LOG_INFO("The way id is: " + w);
+//    LOG_INFO("The free flow speed is: " + std::to_string(tile->GetSpeed(edge, kFreeFlowMask)));
+//    LOG_INFO("The constrained flow speed is: " + std::to_string(tile->GetSpeed(edge, kConstrainedFlowMask)));
+//  }
+
   return DynamicCost::EvaluateRestrictions(access_mask_, edge, is_dest, tile, edgeid, current_time,
                                            tz_index, restriction_idx);
 }
@@ -724,7 +735,10 @@ Cost PedestrianCost::EdgeCost(const baldr::DirectedEdge* edge,
     return Cost(edge->length(), sec);
   }
 
-  LOG_INFO("The time is: "+ std::to_string(time_info.second_of_week));
+  // BWRP START
+
+  // Penalise high traffic rate edges
+  return {sec * edge->free_flow_speed(), sec};
 
   // If the query requires less crime rate routes, we will penalise the segment according to
   // the number of crime incident
@@ -733,9 +747,11 @@ Cost PedestrianCost::EdgeCost(const baldr::DirectedEdge* edge,
     if (edge->crime() > 0) {
       return {sec * 99, sec};
     }
+  //  LOG_INFO("The crime is:" + std::to_string(edge->crime()) + " and the id is " + std::to_string(edge->lineid()));
   }
 
-//  LOG_INFO("The crime is:" + std::to_string(edge->crime()) + " and the id is " + std::to_string(edge->lineid()));
+  // BWRP END
+
 
   // TODO - consider using an array of "use factors" to avoid this conditional
   float factor = 1.0f + kSacScaleCostFactor[static_cast<uint8_t>(edge->sac_scale())] +
