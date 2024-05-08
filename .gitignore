@@ -74,3 +74,12 @@ site/
 *.gph
 
 .DS_Store
+
+# Config files and data files for Valhalla
+duplicateways.txt
+traffic_tiles/
+valhalla.json
+valhalla_tiles.tar
+valhalla_tiles/
+# Data for BWRP
+third-party-data
