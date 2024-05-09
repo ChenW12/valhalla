@@ -1,6 +1,5 @@
-./../build/valhalla_service ../valhalla.json route '{"locations":[{"lat":41.7899513,"lon":-87.6997816},{"lat":41.7881185,"lon":-87.7009504}],"costing":"pedestrian","costing_options":{"pedestrian":{"use_lit":0,"less_crime_rate":false,"low_traffic_rate":true}},"directions_options":{"units":"kilometers"},"date_time":{"type":1,"value":"2024-05-06T10:04"}}' | jq '.'
+./../build/valhalla_service ../valhalla.json route '{"locations":[{"lat":51.50405,"lon":-0.19222},{"lat":51.5092,"lon":-0.1954}],"costing":"pedestrian","costing_options":{"pedestrian":{"use_lit":0,"less_crime_rate":false,"low_traffic_rate":true}},"directions_options":{"units":"kilometers"},"date_time":{"type":1,"value":"2024-05-06T18:00"}}' | jq '.'
 
-# Somewhere in Chicago
-# 41.7881185, -87.7009504
-# 41.7899513, -87.6997816
-# 41.7867448, -87.7009143
+# Passing Kensington Church Street
+# 51.50405,-0.19222
+# 51.5092,-0.1954
