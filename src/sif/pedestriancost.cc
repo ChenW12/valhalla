@@ -1,6 +1,7 @@
 #include "sif/pedestriancost.h"
 #include "baldr/accessrestriction.h"
 #include "baldr/graphconstants.h"
+#include "baldr/graphid.h"
 #include "midgard/constants.h"
 #include "midgard/util.h"
 #include "proto/options.pb.h"
@@ -677,6 +678,9 @@ bool PedestrianCost::Allowed(const baldr::DirectedEdge* edge,
     return false;
   }
 
+//  std::string s = GraphTile::FileSuffix(GraphId("0/3194/158"));
+//  LOG_INFO(s);
+
 //  if (edge->has_flow_speed()) {
 //    std::string s = GraphTile::FileSuffix(edge->endnode());
 //    LOG_INFO(s);
@@ -745,7 +749,9 @@ Cost PedestrianCost::EdgeCost(const baldr::DirectedEdge* edge,
 
   // Penalise high flow speed edges
   if (low_traffic_rate_) {
-    return {sec * edge->free_flow_speed(), sec};
+    if (edge->has_flow_speed()) {
+      return {sec * edge->free_flow_speed(), sec};
+    }
   }
 
   // If the query requires less crime rate routes, we will penalise the segment according to
