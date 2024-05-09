@@ -83,3 +83,7 @@ valhalla_tiles.tar
 valhalla_tiles/
 # Data for BWRP
 third-party-data
+
+# Ignore data files
+data-transformers/crime_data/*.json
+data-transformers/crime_data/*.csv
