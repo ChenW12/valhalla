@@ -30,4 +30,5 @@ with open('./temp2.json') as f:
                     # If the way id does not exist, we give it a start value 1
                     wayid_crime[way_id] = 1
     # Print the dict
-    print(wayid_crime)
+    for wayid, crime in wayid_crime.items():
+        print(wayid, crime)
