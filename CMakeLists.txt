@@ -305,6 +305,15 @@ if(ENABLE_DATA_TOOLS)
     PUBLIC
       ${VALHALLA_SOURCE_DIR}/src/mjolnir/statistics.cc
       ${VALHALLA_SOURCE_DIR}/src/mjolnir/statistics_database.cc)
+
+  # for valhalla_add_live_traffic_data
+  add_library(microtar
+    ${VALHALLA_SOURCE_DIR}/third_party/microtar/src/microtar.c
+    ${VALHALLA_SOURCE_DIR}/third_party/microtar/src/microtar.h)
+
+  target_include_directories(valhalla_add_live_traffic_data PUBLIC
+    ${VALHALLA_BUILD_DIR}
+    ${VALHALLA_SOURCE_DIR}/third_party/microtar/src)
 endif()
 
 if(ENABLE_SERVICES)
