@@ -749,9 +749,14 @@ Cost PedestrianCost::EdgeCost(const baldr::DirectedEdge* edge,
 
   // Penalise high flow speed edges
   if (low_traffic_rate_) {
-    if (edge->has_flow_speed()) {
-      return {sec * edge->free_flow_speed(), sec};
-    }
+    // Historical traffic data
+//    if (edge->has_flow_speed()) {
+//      return {sec * edge->free_flow_speed(), sec};
+//    }
+    
+    // Live traffic data
+    auto live_speed = tile->GetSpeed(edge, kCurrentFlowMask, time_info.second_of_week, false, &flow_sources, 0);
+    return {sec * live_speed, sec};
   }
 
   // If the query requires less crime rate routes, we will penalise the segment according to
