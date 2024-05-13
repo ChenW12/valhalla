@@ -283,6 +283,11 @@ if(ENABLE_TOOLS)
   endforeach()
 endif()
 
+# for valhalla_add_live_traffic_data
+add_library(microtar
+  ${VALHALLA_SOURCE_DIR}/third_party/microtar/src/microtar.c
+  ${VALHALLA_SOURCE_DIR}/third_party/microtar/src/microtar.h)
+
 if(ENABLE_DATA_TOOLS)
   foreach(program ${valhalla_data_tools})
     get_source_path(path ${program})
@@ -290,7 +295,14 @@ if(ENABLE_DATA_TOOLS)
     create_source_groups("Source Files" ${path})
     set_target_properties(${program} PROPERTIES FOLDER "Data Tools")
     target_include_directories(${program} PRIVATE ${cxxopts_include_dir})
-    target_link_libraries(${program} valhalla)
+
+    if (${program} MATCHES "valhalla_add_live_traffic_data")
+      # valhalla_add_live_traffic_data needs microtar
+      target_link_libraries(${program} valhalla microtar)
+    else()
+      target_link_libraries(${program} valhalla)
+    endif()
+
     if (LuaJIT_FOUND AND APPLE AND CMAKE_HOST_SYSTEM_PROCESSOR STREQUAL "x86_64")
       # Using LuaJIT on macOS on Intel processors requires a couple of extra linker flags
       target_link_options(${program} PUBLIC -pagezero_size 10000 -image_base 100000000)
@@ -306,14 +318,10 @@ if(ENABLE_DATA_TOOLS)
       ${VALHALLA_SOURCE_DIR}/src/mjolnir/statistics.cc
       ${VALHALLA_SOURCE_DIR}/src/mjolnir/statistics_database.cc)
 
-  # for valhalla_add_live_traffic_data
-  add_library(microtar
-    ${VALHALLA_SOURCE_DIR}/third_party/microtar/src/microtar.c
-    ${VALHALLA_SOURCE_DIR}/third_party/microtar/src/microtar.h)
-
   target_include_directories(valhalla_add_live_traffic_data PUBLIC
-    ${VALHALLA_BUILD_DIR}
-    ${VALHALLA_SOURCE_DIR}/third_party/microtar/src)
+  ${VALHALLA_BUILD_DIR}
+  ${VALHALLA_SOURCE_DIR}/third_party/microtar/src)
+
 endif()
 
 if(ENABLE_SERVICES)
