@@ -1,4 +1,6 @@
 #include <boost/property_tree/ptree_fwd.hpp>
+#include <cstdint>
+#include <cstdlib>
 #include <stdio.h>
 #include <sys/stat.h>
 #include <sys/mman.h>
@@ -7,6 +9,11 @@
 #include "baldr/traffictile.h"
 #include "config.h"
 #include "third_party/microtar/src/microtar.h"
+
+uint32_t indices[] = {
+  81,82, 83, 84, 87, 88, 89, 90, 93, 94, 95, 105, 106, 107, 108, 117, 118, 121, 122,
+  125, 126, 153, 154, 157, 158, 161, 162, 452, 453, 458
+};
 
 /** Copy of raw header for use with sizeof() **/
 typedef struct {
@@ -58,13 +65,13 @@ private:
 };
 
 int main(int argc, char** argv) {
-  if ( argc != 2) {
-    LOG_ERROR("Usage: " + std::string(argv[0]) + " config/file.json");
+  if (argc != 3) {
+    LOG_ERROR("Usage: " + std::string(argv[0]) + " config/file.json <speed>");
     return 1;
   }
   std::string config_file(argv[1]);
+  int target_speed = std::atoi(argv[2]);
   boost::property_tree::ptree config = valhalla::config(config_file);
-
 
   const auto memory =
       std::make_shared<MMap>(config.get<std::string>("mjolnir.traffic_extract").c_str());
@@ -85,8 +92,12 @@ int main(int argc, char** argv) {
   valhalla::baldr::GraphReader reader(config.get_child("mjolnir"));
   mtar_header_t tar_header;
 
-  // TODO: using the name of the target tile
-  mtar_find(&tar, "", &tar_header);
+  // Road A4204 is in this graph
+  int err = mtar_find(&tar, "0/003/194.gph", &tar_header);
+  if (err != 0) {
+    LOG_ERROR("mtar cannot find the file in tar, error code is: " + std::to_string(err));
+    return 1;
+  }
 
   valhalla::baldr::TrafficTile tile(
     std::make_unique<MMapGraphMemory>(memory,
@@ -96,11 +107,14 @@ int main(int argc, char** argv) {
 
   valhalla::baldr::GraphId tile_id(tile.header->tile_id);
 
-  auto speed = valhalla::baldr::TrafficSpeed();
-  speed.encoded_speed1 = 50 >> 1;
-  speed.breakpoint1 = 255;
-  printf("Adding live traffic data ...\n");
+  for (auto index : indices) {
+    LOG_INFO("Adding the edge with index: " + std::to_string(index));
+    valhalla::baldr::TrafficSpeed* target_edge =
+      const_cast<valhalla::baldr::TrafficSpeed*>(tile.speeds + index);
 
-
-  printf("speed.encoded_speed1: %d\n", speed.get_speed(0));
+    target_edge->breakpoint1 = 255;
+    target_edge->encoded_speed1 = target_speed >> 1;
+    target_edge->overall_encoded_speed = target_speed >> 1;
+  }
+  LOG_INFO("Adding live traffic data ...");
 }
