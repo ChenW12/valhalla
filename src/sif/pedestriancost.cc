@@ -728,28 +728,6 @@ Cost PedestrianCost::EdgeCost(const baldr::DirectedEdge* edge,
     return Cost(edge->length(), sec);
   }
 
-  // BWRP START
-
-  // Penalise high flow speed edges
-  if (low_traffic_rate_) {
-    // Take traffic speed into account
-    auto speed = tile->GetSpeed(edge, kCurrentFlowMask, time_info.second_of_week, false, &flow_sources, 0);
-    return {sec * speed, sec};
-  }
-
-  // If the query requires less crime rate routes, we will penalise the segment according to
-  // the number of crime incident
-  // TODO it need to be a better factor calculation
-  if (less_crime_rate_) {
-    if (edge->crime() > 0) {
-      return {sec * 99, sec};
-    }
-  //  LOG_INFO("The crime is:" + std::to_string(edge->crime()) + " and the id is " + std::to_string(edge->lineid()));
-  }
-
-  // BWRP END
-
-
   // TODO - consider using an array of "use factors" to avoid this conditional
   float factor = 1.0f + kSacScaleCostFactor[static_cast<uint8_t>(edge->sac_scale())] +
                  grade_penalty[edge->weighted_grade()];
@@ -772,6 +750,28 @@ Cost PedestrianCost::EdgeCost(const baldr::DirectedEdge* edge,
   }
 
   factor *= edge->lit() + (!edge->lit() * unlit_factor_);
+
+  // BWRP START
+  // Penalise low speed edges, low speed means high traffic rate
+  if (low_traffic_rate_) {
+    // Take traffic speed into account
+    auto speed = tile->GetSpeed(edge, kDefaultFlowMask,
+        time_info.second_of_week, false, &flow_sources, time_info.seconds_from_now);
+    float speed_factor = 1. + (0.05) * speed;
+    factor /= speed_factor;
+    LOG_INFO("The speed is:" + std::to_string(speed) + " and the way id is"\
+      + std::to_string(tile->edgeinfo(edge).wayid()));
+  }
+
+  // If the query requires less crime rate routes, we will penalise the segment according to
+  // the number of crime incident
+  if (less_crime_rate_) {
+    float crime_factor = 1. + (0.5) * edge->crime();
+    factor *= crime_factor;
+    LOG_INFO("The crime is:" + std::to_string(edge->crime()) + " and the way id is"\
+      + std::to_string(tile->edgeinfo(edge).wayid()));
+  }
+  // BWRP END
 
   // Slightly favor walkways/paths and penalize alleys and driveways.
   return {sec * factor, sec};
