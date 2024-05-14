@@ -656,10 +656,6 @@ bool PedestrianCost::Allowed(const baldr::DirectedEdge* edge,
                              const uint64_t current_time,
                              const uint32_t tz_index,
                              uint8_t& restriction_idx) const {
-//  // Does not allow edges with not light
-//  if (!edge->lit()) {
-//    return false;
-//  }
 
   if (!IsAccessible(edge) || (edge->surface() > minimal_allowed_surface_) || edge->is_shortcut() ||
       IsUserAvoidEdge(edgeid) || edge->sac_scale() > max_hiking_difficulty_ ||
@@ -677,19 +673,6 @@ bool PedestrianCost::Allowed(const baldr::DirectedEdge* edge,
        edge->use() == Use::kTransitConnection)) {
     return false;
   }
-
-//  std::string s = GraphTile::FileSuffix(GraphId("0/3194/158"));
-//  LOG_INFO(s);
-
-//  if (edge->has_flow_speed()) {
-//    std::string s = GraphTile::FileSuffix(edge->endnode());
-//    LOG_INFO(s);
-//    auto w = std::to_string(tile->edgeinfo(edge).wayid());
-//    LOG_INFO("The edge id is: " + std::to_string(edgeid));
-//    LOG_INFO("The way id is: " + w);
-//    LOG_INFO("The free flow speed is: " + std::to_string(tile->GetSpeed(edge, kFreeFlowMask)));
-//    LOG_INFO("The constrained flow speed is: " + std::to_string(tile->GetSpeed(edge, kConstrainedFlowMask)));
-//  }
 
   return DynamicCost::EvaluateRestrictions(access_mask_, edge, is_dest, tile, edgeid, current_time,
                                            tz_index, restriction_idx);
